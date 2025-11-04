@@ -1,13 +1,1 @@
-quiero empezar haciendo lo mas básico de un modulo para odoo version 18, que voy a llamar fleet_manager, sera para controlar la documentación de los vehículos en la empresa, tarjeta de propiedad, soat (Seguro obligatorio contra accidentes de transito, se renueva cada año), revision técnicas (se renueva cada año), póliza de seguro (contra robo, accidentes, etc), todos estos campos deben contar de 3 partes, un es el detalle del documento y otro un botón que nos sirva para adjuntar el documento(solo documentos en pdf), y otro para asociar un evento de calendario(vencimiento del documento, el soat y revision técnica son los únicos que se renuevan cada año, ósea tienen una vigencia de 12 meses.
-los nombres de los vehículos deberán ser los del modulo fleet que ya tengo instalado, los campos heredados podrían ser, matricula, modelo, categoría, conductor.
-de alguna manera debería avisarme los primeros días del mes todos los eventos
-considera que estamos usando la version 18 de odoo
-considera usar el modulo de traducciones, para la internacionalización del modulo en un archivo de traduccion es_PE.po
-esta opciones podrían ser una pestaña en la vista form del vehículo, llamada "Documentación", como una manera de extender la funcionalidad del modulo fleet de odoo
-también podríamos esconde la vista kanban, para que por defecto sea la vista lista
-no hagas un menu adicional
-
-
-
-copia_20251014
 
