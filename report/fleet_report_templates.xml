@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Report Action for Document Expirations (from Calendar Events) -->
+        <record id="action_report_document_expirations" model="ir.actions.report">
+            <field name="name">Document Expirations</field>
+            <field name="model">calendar.event</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">fleet_manager.report_document_expirations_template</field>
+            <field name="report_file">fleet_manager.report_document_expirations_template</field>
+            <field name="print_report_name">'Document Expirations - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="calendar.model_calendar_event"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- Report Action for Vehicle Documents -->
+        <record id="action_report_vehicle_documents" model="ir.actions.report">
+            <field name="name">Vehicle Documents List</field>
+            <field name="model">fleet.vehicle.document</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">fleet_manager.report_vehicle_documents_template</field>
+            <field name="report_file">fleet_manager.report_vehicle_documents_template</field>
+            <field name="print_report_name">'Vehicle Documents - %s' % (object.vehicle_id.name)</field>
+            <field name="binding_model_id" ref="model_fleet_vehicle_document"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- QWeb Template for the Expirations Report -->
+        <template id="report_document_expirations_template">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Document Expiration Report</h2>
+                        <p>List of scheduled document expirations.</p>
+
+                        <table class="table table-sm o_main_table mt-4">
+                            <thead>
+                                <tr>
+                                    <th name="th_event" class="text-left">Event</th>
+                                    <th name="th_start_date" class="text-left">Start Date</th>
+                                    <th name="th_attendees" class="text-left">Attendees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="event">
+                                    <tr>
+                                        <td><span t-field="event.name"/></td>
+                                        <td><span t-field="event.start" t-options='{"widget": "date"}'/></td>
+                                        <td><span t-field="event.partner_ids"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!-- QWeb Template for the Vehicle Documents Report -->
+        <template id="report_vehicle_documents_template">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Vehicle Documents Report</h2>
+                        <p>List of registered vehicle documents.</p>
+
+                        <table class="table table-sm o_main_table mt-4">
+                            <thead>
+                                <tr>
+                                    <th name="th_vehicle" class="text-left">Vehicle</th>
+                                    <!-- <th name="th_plate" class="text-left">License Plate</th> -->
+                                    <th name="th_document" class="text-left">Document</th>
+                                    <th name="th_expiration" class="text-left">Expiration Date</th>
+                                    <th name="th_days" class="text-left">Days to Expire</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="document">
+                                    <tr>
+                                        <td><span t-field="document.vehicle_id.name"/></td>
+                                        <!-- <td><span t-field="document.license_plate"/></td> -->
+                                        <td><span t-field="document.name"/></td>
+                                        <td><span t-field="document.expiration_date"/></td>
+                                        <td><span t-field="document.days_to_expire"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

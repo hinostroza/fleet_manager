@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Form View for fleet.vehicle.document -->
+        <record id="fleet_vehicle_document_view_form" model="ir.ui.view">
+            <field name="name">fleet.vehicle.document.form</field>
+            <field name="model">fleet.vehicle.document</field>
+            <field name="arch" type="xml">
+                <form string="Vehicle Document">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_create_calendar_event" type="object" class="oe_stat_button" icon="fa-calendar"
+                                    invisible="expiration_date == False">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Calendar Event</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="e.g. SOAT 2025"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="vehicle_id"/>
+                                <field name="license_plate"/>
+                                <field name="document_type"/>
+                            </group>
+                            <group>
+                                <field name="expiration_date"/>
+                                <field name="attachment" widget="binary" filename="attachment_name"/>
+                                <field name="attachment_name" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <!-- <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div> -->
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View for fleet.vehicle.document -->
+        <record id="fleet_vehicle_document_view_tree" model="ir.ui.view">
+            <field name="name">fleet.vehicle.document.tree</field>
+            <field name="model">fleet.vehicle.document</field>
+            <field name="arch" type="xml">
+                <list string="Vehicle Documents" decoration-danger="is_expired" decoration-warning="days_to_expire &lt; 30 and not is_expired">
+                    <field name="license_plate" optional="show"/>
+                    <field name="vehicle_id" optional="hide"/>
+                    <field name="name"/>
+                    <field name="document_type"/>
+                    <field name="expiration_date"/>
+                    <field name="is_expired" invisible="1"/>
+                    <field name="days_to_expire"/>
+                    <field name="attachment" widget="binary" filename="attachment_name" string="Attachment"/>
+                    <field name="attachment_name" invisible="1" optional="hide"/>
+                    <button name="action_create_calendar_event" type="object" icon="fa-calendar" string="Event"
+                            invisible="expiration_date == False"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Search View for fleet.vehicle.document -->
+        <record id="fleet_vehicle_document_view_search" model="ir.ui.view">
+            <field name="name">fleet.vehicle.document.search</field>
+            <field name="model">fleet.vehicle.document</field>
+            <field name="arch" type="xml">
+                <search string="Search Documents">
+                    <field name="name" string="Document"/>
+                    <field name="license_plate" string="License Plate"/>
+                    <field name="vehicle_id"/>
+                    <separator/>
+                    <filter string="Expired" name="is_expired" domain="[('is_expired', '=', True)]"/>
+                    <filter string="Expiring Soon" name="expiring_soon" domain="[('days_to_expire', '&lt;', 30), ('days_to_expire', '&gt;=', 0)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Vehicle" name="group_by_vehicle" context="{'group_by': 'vehicle_id'}"/>
+                        <filter string="Document Type" name="group_by_type" context="{'group_by': 'document_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    </data>
+</odoo>

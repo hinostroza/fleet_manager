@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Action for Vehicle Documents -->
+        <record id="action_fleet_vehicle_document_all" model="ir.actions.act_window">
+            <field name="name">Vehicle Documents</field>
+            <field name="res_model">fleet.vehicle.document</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'search_default_group_by_vehicle': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No vehicle documents found.
+                </p><p>
+                    Create new documents to keep track of their expirations.
+                </p>
+            </field>
+        </record>
+
+        <!-- Custom Tree View for Expiration Events -->
+        <record id="view_expiration_event_tree" model="ir.ui.view">
+            <field name="name">expiration.event.tree</field>
+            <field name="model">calendar.event</field>
+            <field name="arch" type="xml">
+                <list string="Expiration Events">
+                    <field name="name"/>
+                    <field name="start" string="Start Date" optional="show"/>
+                    <field name="stop" string="End Date" optional="show"/>
+                    <field name="duration" optional="show"/>
+                    <field name="partner_ids" string="Attendees" widget="many2many_tags"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Action for the Document Expiration Calendar -->
+        <record id="action_fleet_document_calendar" model="ir.actions.act_window">
+            <field name="name">Expirations Calendar</field>
+            <field name="res_model">calendar.event</field>
+            <field name="domain">[('res_model', '=', 'fleet.vehicle.document')]</field>
+            <field name="context">{
+                'default_res_model': 'fleet.vehicle.document',
+                'default_res_model_id': 'fleet_manager.model_fleet_vehicle_document'
+            }</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">No expiration events found.</p>
+            </field>
+            <field name="view_mode">list,calendar,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('view_expiration_event_tree')}),
+                (0, 0, {'view_mode': 'calendar'}),
+                (0, 0, {'view_mode': 'form'})]"/>
+        </record>
+
+        <!-- Menu item for Vehicle Documents under Fleet -->
+        <menuitem id="menu_fleet_vehicle_documents" name="Vehicle Documents" parent="fleet.menu_root" action="action_fleet_vehicle_document_all" sequence="10"/>
+
+        <!-- Menu item for the Expiration Calendar -->
+        <menuitem id="menu_fleet_document_calendar" name="Expirations Calendar" parent="fleet.menu_root" action="action_fleet_document_calendar" sequence="11"/>
+
+    </data>
+</odoo>
